@@ -1,0 +1,20 @@
+import csv
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+def login_test(username, password, expected_result):
+  driver = webdriver.Chrome()
+  driver.get("https://example.com/login")
+  driver.find_element(By.ID, "username").send_keys(username)
+  driver.find_element(By.ID, "password").send_keys(password)
+  driver.find_element(By.ID, "login-button").click()
+  actual_result = "success" if "Welcome" in driver.title else "failure"
+  assert actual_result == expected_result, f"Test failed for {username}"
+  driver.quit()
+
+# Leer datos de prueba desde archivo CSV
+with open('login_test_data.csv', 'r') as file:
+reader = csv.reader(file)
+next(reader) # Saltar fila de encabezado
+for row in reader:
+  username, password, expected_result = row
+  login_test(username, password, expected_result)

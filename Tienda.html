@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tienda de Ropa Online</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .contenedor {
+            width: 90%;
+            max-width: 500px;
+            margin: 60px auto;
+        }
+
+        .tarjeta {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1557a6;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #1e3a5f;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #b8c7d9;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1769aa;
+            box-shadow: 0 0 0 2px rgba(23, 105, 170, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background-color: #1769aa;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0d4f82;
+        }
+
+        .error {
+            color: #c62828;
+            background-color: #ffebee;
+            border: 1px solid #ef9a9a;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .resultado {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #eaf3ff;
+            border-left: 5px solid #1769aa;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .resultado p {
+            margin: 8px 0;
+        }
+
+        .descuento {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1557a6;
+        }
+
+        .total {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0d4f82;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <div class="tarjeta">
+
+            <h1>Tienda de Ropa Online</h1>
+
+            <p class="descripcion">
+                Calculadora de descuentos
+            </p>
+
+            <form id="formulario">
+
+                <label for="compra">
+                    Importe de la compra:
+                </label>
+
+                <input
+                    type="number"
+                    id="compra"
+                    min="0"
+                    step="0.01"
+                    placeholder="Ejemplo: 5000"
+                >
+
+                <button type="submit">
+                    Calcular descuento
+                </button>
+
+            </form>
+
+            <div id="error" class="error"></div>
+
+            <div id="resultado" class="resultado">
+
+                <p>
+                    Importe de compra:
+                    <strong id="importe"></strong>
+                </p>
+
+                <p>
+                    Porcentaje de descuento:
+                    <strong id="porcentaje"></strong>
+                </p>
+
+                <p>
+                    Descuento:
+                    <strong id="descuento" class="descuento"></strong>
+                </p>
+
+                <p>
+                    Total a pagar:
+                    <strong id="total" class="total"></strong>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const formulario = document.getElementById("formulario");
+
+        formulario.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const compra = parseFloat(
+                document.getElementById("compra").value
+            );
+
+            const error = document.getElementById("error");
+            const resultado = document.getElementById("resultado");
+
+            // Limpiar mensajes anteriores
+            error.style.display = "none";
+            resultado.style.display = "none";
+
+            // Validación
+            if (isNaN(compra)) {
+
+                error.textContent =
+                    "Error: debe ingresar el importe de la compra.";
+
+                error.style.display = "block";
+
+                return;
+            }
+
+            if (compra <= 0) {
+
+                error.textContent =
+                    "Error: el importe de la compra debe ser mayor que $0.";
+
+                error.style.display = "block";
+
+                return;
+            }
+
+            // Determinar descuento
+            let porcentaje = 0;
+
+            if (compra > 10000) {
+
+                porcentaje = 15;
+
+            } else if (compra >= 5000) {
+
+                porcentaje = 10;
+
+            } else if (compra >= 1000) {
+
+                porcentaje = 5;
+
+            }
+
+            // Calcular descuento
+            const descuento = compra * (porcentaje / 100);
+
+            // Calcular total
+            const total = compra - descuento;
+
+            // Mostrar resultados
+            document.getElementById("importe").textContent =
+                "$" + compra.toFixed(2);
+
+            document.getElementById("porcentaje").textContent =
+                porcentaje + "%";
+
+            document.getElementById("descuento").textContent =
+                "$" + descuento.toFixed(2);
+
+            document.getElementById("total").textContent =
+                "$" + total.toFixed(2);
+
+            resultado.style.display = "block";
+
+        });
+
+    </script>
+
+</body>
+</html>
