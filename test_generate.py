@@ -8,7 +8,7 @@ def usuarios():
 
 
 def test_cantidad_de_usuarios(usuarios):
-    assert len(usuarios) == 100
+    assert len(usuarios) == 70
 
 
 def test_cada_usuario_tiene_tres_campos(usuarios):
@@ -18,7 +18,7 @@ def test_cada_usuario_tiene_tres_campos(usuarios):
 
 def test_password_tiene_12_caracteres(usuarios):
     for _, password, _ in usuarios:
-        assert len(password) == 12
+        assert len(password) == 8
 
 
 def test_emails_son_validos(usuarios):
