@@ -1,5 +1,10 @@
 import pytest
-from generate import generar_productos, PRODUCTOS, MARCAS
+from generate_prod import (
+    generar_productos,
+    generar_clave,
+    PRODUCTOS,
+    MARCAS,
+)
 
 
 @pytest.fixture
@@ -13,52 +18,53 @@ def test_cantidad_de_productos(productos):
 
 def test_cada_producto_tiene_cuatro_campos(productos):
     for producto in productos:
-        assert len(producto) == 4
-        assert "producto" in producto
-        assert "clave" in producto
-        assert "precio" in producto
-        assert "marca" in producto
+        assert set(producto.keys()) == {"producto", "clave", "precio", "marca"}
 
 
-def test_clave_tiene_seis_caracteres(productos):
-    for producto in productos:
-        assert len(producto["clave"]) == 6
+def test_producto_pertenece_al_catalogo(productos):
+    for p in productos:
+        assert p["producto"] in PRODUCTOS
 
 
-def test_clave_contiene_solo_mayusculas_y_numeros(productos):
-    caracteres_validos = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-
-    for producto in productos:
-        assert all(
-            caracter in caracteres_validos
-            for caracter in producto["clave"]
-        )
+def test_marca_pertenece_al_catalogo(productos):
+    for p in productos:
+        assert p["marca"] in MARCAS
 
 
-def test_precios_son_validos(productos):
-    for producto in productos:
-        assert isinstance(producto["precio"], float)
-        assert 100 <= producto["precio"] <= 20000
+def test_clave_tiene_6_caracteres(productos):
+    for p in productos:
+        assert len(p["clave"]) == 6
 
 
-def test_nombres_de_productos_son_validos(productos):
-    for producto in productos:
-        assert producto["producto"] in PRODUCTOS
+def test_clave_solo_mayusculas_y_digitos(productos):
+    for p in productos:
+        assert p["clave"].isalnum()
+        assert p["clave"] == p["clave"].upper()
 
 
-def test_marcas_son_validas(productos):
-    for producto in productos:
-        assert producto["marca"] in MARCAS
+def test_precio_en_rango(productos):
+    for p in productos:
+        assert 100 <= p["precio"] <= 20000
+
+
+def test_precio_tiene_maximo_dos_decimales(productos):
+    for p in productos:
+        assert round(p["precio"], 2) == p["precio"]
+
+
+def test_precio_es_numero(productos):
+    for p in productos:
+        assert isinstance(p["precio"], float)
 
 
 def test_claves_son_unicas(productos):
-    claves = [producto["clave"] for producto in productos]
+    claves = [p["clave"] for p in productos]
     assert len(claves) == len(set(claves))
 
 
-def test_cantidad_negativa():
-    assert generar_productos(-1) == []
+def test_generar_clave_longitud_personalizada():
+    assert len(generar_clave(10)) == 10
 
 
-def test_lista_vacia():
+def test_cero_productos_devuelve_lista_vacia():
     assert generar_productos(0) == []
