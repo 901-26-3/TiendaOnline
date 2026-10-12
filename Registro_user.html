@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f3f6fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .contenedor {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 1000px;
+            padding: 55px 60px;
+            border-radius: 25px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.10);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2059a8;
+            font-size: 48px;
+            margin-bottom: 25px;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #64748b;
+            font-size: 26px;
+            margin-bottom: 50px;
+        }
+
+        .grupo {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #233f66;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 22px;
+            font-size: 22px;
+            border: 2px solid #b8cce5;
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #2067ad;
+            box-shadow: 0 0 5px rgba(32, 103, 173, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 22px;
+            background-color: #216eae;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #18558c;
+        }
+
+        .mensaje {
+            display: none;
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .exito {
+            display: block;
+            color: #166534;
+            background-color: #dcfce7;
+        }
+
+        .error {
+            display: block;
+            color: #b91c1c;
+            background-color: #fee2e2;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .contenedor {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitulo {
+                font-size: 20px;
+                margin-bottom: 35px;
+            }
+
+            label {
+                font-size: 18px;
+            }
+
+            input {
+                padding: 16px;
+                font-size: 18px;
+            }
+
+            button {
+                padding: 18px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="contenedor">
+
+        <h1>Registro de Usuario</h1>
+
+        <p class="subtitulo">
+            Crea tu cuenta
+        </p>
+
+        <form id="formRegistro">
+
+            <div class="grupo">
+                <label for="nombre">Nombre:</label>
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Ingresa tu nombre"
+                    autocomplete="given-name"
+                    required
+                >
+            </div>
+
+            <div class="grupo">
+                <label for="apellido">Apellido:</label>
+                <input
+                    type="text"
+                    id="apellido"
+                    name="apellido"
+                    placeholder="Ingresa tu apellido"
+                    autocomplete="family-name"
+                    required
+                >
+            </div>
+
+            <div class="grupo">
+                <label for="correo">Correo electrónico:</label>
+                <input
+                    type="email"
+                    id="correo"
+                    name="correo"
+                    placeholder="ejemplo@correo.com"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="grupo">
+                <label for="password">Contraseña:</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Mínimo 8 caracteres"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <button type="submit">
+                Registrar usuario
+            </button>
+
+            <div id="mensaje" class="mensaje" role="status"></div>
+
+        </form>
+
+    </main>
+
+    <script>
+        const formulario = document.getElementById("formRegistro");
+        const mensaje = document.getElementById("mensaje");
+
+        formulario.addEventListener("submit", function(evento) {
+            evento.preventDefault();
+
+            const nombre = document.getElementById("nombre").value.trim();
+            const apellido = document.getElementById("apellido").value.trim();
+            const correo = document.getElementById("correo").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (!nombre || !apellido || !correo || !password) {
+                mostrarMensaje("Todos los campos son obligatorios.", "error");
+                return;
+            }
+
+            if (password.length < 8) {
+                mostrarMensaje(
+                    "La contraseña debe tener al menos 8 caracteres.",
+                    "error"
+                );
+                return;
+            }
+
+            mostrarMensaje(
+                "Validación correcta. El formulario está listo para enviarse al servidor.",
+                "exito"
+            );
+
+            formulario.reset();
+        });
+
+        function mostrarMensaje(texto, tipo) {
+            mensaje.textContent = texto;
+            mensaje.className = "mensaje " + tipo;
+        }
+    </script>
+
+</body>
+</html>
